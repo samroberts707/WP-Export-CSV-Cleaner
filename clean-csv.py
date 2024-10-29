@@ -20,22 +20,18 @@ print("Cleaning: %s" % defined_path)
 # try:
 
 with open(defined_path, "r") as file:
-    reader = csv.reader(file, delimiter="\t")
-    cleaned_data = ""
-    for line in reader:
-        for index in range(indexes):
-            for length in range(id_length): 
-                # print("Checking id length of %s in index %d" % (length,index))
-                line.replace(""";i:1;s:3:""", "|")
-        cleaned_data = ''.join(line)
-        lines_cleaned += 1
+    data = file.read()
+    clean_data = data
+    # clean_data = data.replace('"";i:1;s:3:""', "|")
+    for index in range(indexes):
+        # clean_data = clean_data.replace
+        for length in range(id_length):
+            clean_data = clean_data.replace('a:%s:{i:0;s:%d:""' % (index, length), '')
+            clean_data = clean_data.replace('"";i:%s;s:%d:""' % (index, length), "|")
+    clean_data = clean_data.replace('"";}','')
 
-output = open('output.csv', "w")
-output.writelines(cleaned_data)
-output.close
+with open("output.csv", "w", encoding="utf-8") as file:
+    file.write(clean_data)
+    print("Written to: ./output.csv")
 
 print("Completed")
-print("Lines cleaned: ", lines_cleaned)
-# except:
-#     print("Failed loading file")
-#     exit(1)
